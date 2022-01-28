@@ -1,0 +1,9 @@
+.card,.card-body{
+    text-align: center;
+margin: auto;
+width: 90%;
+}
+
+.inputName{
+    margin: 5%;
+}
