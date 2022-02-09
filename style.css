@@ -2,8 +2,46 @@
     text-align: center;
 margin: auto;
 width: 90%;
+background-color: #ECECEC ;
 }
+
 
 .inputName{
     margin: 5%;
+}
+
+.footerContent{
+    margin-left:5%;
+    margin-right:5%;
+    display:flex;
+    justify-content: center;
+    background-color:#ffff;
+    
+}
+.redes {
+    margin: 3%;
+    text-align: center;
+    color:black;
+}
+
+.btnCV{
+
+ background-color: #818283;
+ border-color:none!important;
+}
+
+.btnCV:hover{
+    width: 100%;
+    background-color:#515253; 
+ 
+}
+
+.btnCV a{
+    color:#ffff;
+    text-decoration: none;
+}
+
+.btnCV a:hover{
+    color:#ffff;;
+    
 }
