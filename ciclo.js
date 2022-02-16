@@ -14,7 +14,6 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
-
 // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR GET EN LOCALSTORAGE A FUTURO *
 // function GetInvitados() {
 //   let lista = localStorage.getItem("listaInvitados");
@@ -25,42 +24,44 @@ agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
 
   if (nombre) {
-    if (flagLimiteInvitados == 0) {
-      let cantidad = prompt("ingrese el limite total de invitados:");
-      limiteInvitados.textContent = cantidad;
-      flagLimiteInvitados = 1;
+    if (isNaN(nombre)) {
+      if (flagLimiteInvitados == 0) {
+        let cantidad = prompt("ingrese el limite total de invitados:");
+        limiteInvitados.textContent = cantidad;
+        flagLimiteInvitados = 1;
+      }
+
+      const cardName = document.createElement("DIV");
+      const TagName = document.createElement("p");
+      const buttonAdd = document.createElement("button");
+
+      cardName.classList.add("Card-Body");
+      cardName.classList.add("item");
+      TagName.classList.add("Card-text");
+      buttonAdd.classList.add("btn-primary");
+      buttonAdd.classList.add("btn");
+      buttonAdd.classList.add("add");
+
+      TagName.textContent = nombre;
+      buttonAdd.setAttribute("id", nombre);
+      buttonAdd.setAttribute("onclick", "addName(this)");
+      buttonAdd.textContent = ">";
+
+      let codigoHTMl = cardName.appendChild(TagName);
+      codigoHTMl.appendChild(buttonAdd);
+
+      document.querySelector("#item").appendChild(codigoHTMl);
+      document.querySelector("#invitado").value = "";
+
+      invitados.push(nombre);
     }
-
-
-    const cardName = document.createElement("DIV");
-    const TagName = document.createElement("p");
-    const buttonAdd = document.createElement("button");
-
-    cardName.classList.add("Card-Body");
-    cardName.classList.add("item");
-    TagName.classList.add("Card-text");
-    buttonAdd.classList.add("btn-primary");
-    buttonAdd.classList.add("btn");
-    buttonAdd.classList.add("add");
-
-    TagName.textContent = nombre;
-    buttonAdd.setAttribute("id", nombre);
-    buttonAdd.setAttribute("onclick", "addName(this)");
-    buttonAdd.textContent = ">";
-
-    let codigoHTMl = cardName.appendChild(TagName);
-    codigoHTMl.appendChild(buttonAdd);
-
-    document.querySelector("#item").appendChild(codigoHTMl);
-    document.querySelector("#invitado").value = "";
   }
 
-  invitados.push(nombre);
   cantidadDeInvitados.textContent = invitados.length;
   let AltInvit = invitados.length;
-let result = (AltInvit * 100)/parseInt(limiteInvitados.textContent);
-result = result.toFixed(2);
-porcentajeOcupacion.textContent = result+"%";
+  let result = (AltInvit * 100) / parseInt(limiteInvitados.textContent);
+  result = result.toFixed(2);
+  porcentajeOcupacion.textContent = result + "%";
   // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR SET Y GET EN LOCALSTORAGE A FUTURO *
   //   if (localStorage.length != 0) {
   //       let lista=[];
