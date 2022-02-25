@@ -16,15 +16,17 @@
         <div class="card-body">
             <h5 class="card-title">Generador de invitaciones a eventos</h5>
             <div class="panelControl">
-            <div class="card monitor"> <label for="Limite invitados">Limite invitados</label>
-                <p id="limiteInvitados">100</p>
-            </div>
-            <div class="card monitor"> <label for="Cantidad de invitados">Cantidad de invitados</label>
-                <p id="cantidadDeInvitados">100</p>
-            </div>
-            <div class="card monitor"> <label for="Porcentaje de ocupacion">Porcentaje de ocupación</label>
-                <p id="porcentajeOcupacion">100</p>
-            </div>
+                <div class="card monitor" id="limite"> <label for="Limite invitados">Limite invitados</label>
+                    <p id="limiteInvitados">100</p>
+                </div>
+                <div class="card monitor" id="cantidad"> <label for="Cantidad de invitados">Cantidad de
+                        invitados</label>
+                    <p id="cantidadDeInvitados">100</p>
+                </div>
+                <div class="card monitor" id="porcentaje"> <label for="Porcentaje de ocupacion">Porcentaje de
+                        ocupación</label>
+                    <p id="porcentajeOcupacion">100</p>
+                </div>
 
             </div>
             <p class="card-text">Ingresa los datos</p>
@@ -55,14 +57,30 @@
             <button type="submit" id="submit" class="btn btn-primary">Agregar a la lista</button>
         </div>
         <div class="card cardPreview" id="templateCard">
-            <div class="card-body invitation">
-                <div class="CardStyleInvitation">
-                    <h1 class="title CardStyleInvitation" id="titulo"></h1>
-                    <h2 class="title CardStyleInvitation" id="nombreInvitado"></h2>
-                    <h3 class="details CardStyleInvitation" id="detalle"></h3>
-                    <h4 class="date CardStyleInvitation" id="fecha"></h4>
-                    <h6 class="address CardStyleInvitation" id="direccion"></h6>
+            <div class="card formInvitado">
+                <h2 id="nombreInvitado" class="centerElement"></h2>
+                <label for="Title" class="centerElement">Edad</label>
+                <input type="number" class="form-control" id="edad">
+                <p>Seleccione la preferencia del invitado</p>
+                <div>
+                    <input type="radio" id="Carne" name="dieta" value="Carne" checked>
+                    <label for="Carne">Carne</label>
                 </div>
+
+                <div>
+                    <input type="radio" id="Viggie" name="dieta" value="Viggie">
+                    <label for="Viggie">Viggie</label>
+                </div>
+
+                <div>
+                    <input type="radio" id="Celiaco" name="dieta" value="Celiaco">
+                    <label for="Celiaco">Celiaco</label>
+                </div>
+
+                <label for="text" class="centerElement">E-Mail</label>
+                <input type="text" class="form-control" id="email">
+
+                <button type="submit" id="guardar" class="btn btn-default">Guardar</button>
             </div>
         </div>
     </div>

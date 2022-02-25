@@ -1,5 +1,6 @@
 const agregar = document.querySelector("#submit");
 const generar = document.querySelector("#generar");
+const guardar = document.querySelector("#guardar");
 const add = document.querySelector("#add");
 const allGuest = document.querySelector("#allGuest");
 
@@ -9,10 +10,19 @@ const porcentajeOcupacion = document.querySelector("#porcentajeOcupacion");
 
 let invitados = [];
 let flagLimiteInvitados = 0;
+let ultimoId = 0;
+let select;
 
 limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
+
+class Persona {
+  constructor(id, nombre, edad, dieta, email) {
+    this.id = id;
+    this.nombre = nombre;
+  }
+}
 
 // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR GET EN LOCALSTORAGE A FUTURO *
 // function GetInvitados() {
@@ -20,8 +30,15 @@ porcentajeOcupacion.textContent = 0;
 //   return lista;
 // }
 
+function generarID(ultimoId) {
+  let id = ultimoId + 1;
+  return id;
+}
+
 agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
+
+  ultimoId = generarID(ultimoId);
 
   if (nombre) {
     if (isNaN(nombre)) {
@@ -43,6 +60,7 @@ agregar.addEventListener("click", () => {
       buttonAdd.classList.add("add");
 
       TagName.textContent = nombre;
+      buttonAdd.setAttribute("tag", ultimoId);
       buttonAdd.setAttribute("id", nombre);
       buttonAdd.setAttribute("onclick", "addName(this)");
       buttonAdd.textContent = ">";
@@ -53,7 +71,8 @@ agregar.addEventListener("click", () => {
       document.querySelector("#item").appendChild(codigoHTMl);
       document.querySelector("#invitado").value = "";
 
-      invitados.push(nombre);
+      const persona = new Persona(ultimoId, nombre, "", "", "");
+      invitados.push(persona);
     }
   }
 
@@ -61,20 +80,30 @@ agregar.addEventListener("click", () => {
   let AltInvit = invitados.length;
   let result = (AltInvit * 100) / parseInt(limiteInvitados.textContent);
   result = result.toFixed(2);
+  if (result == 100.0) {
+    document
+      .querySelector("#limite")
+      .setAttribute("style", "background-color:red;");
+    document
+      .querySelector("#cantidad")
+      .setAttribute("style", "background-color:red;");
+    const test = document
+      .querySelector("#porcentaje")
+      .setAttribute("style", "background-color:red;");
+  }
   porcentajeOcupacion.textContent = result + "%";
   // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR SET Y GET EN LOCALSTORAGE A FUTURO *
-  //   if (localStorage.length != 0) {
-  //       let lista=[];
-  //       let listainvitadosAdd = [];
-  //     lista = GetInvitados();
-  //     lista.push(nombre);
-  //     localStorage.setItem("listaInvitados", lista);
+  // if (localStorage.length != 0) {
+  //     let lista=[];
+  //   lista = GetInvitados();
+  //   lista.push(nombre);
+  //   localStorage.setItem("listaInvitados", lista);
 
-  //   }
-  //   else {
-  //     invitados.push(nombre);
-  //    localStorage.setItem("listaInvitados",invitados);
-  //   }
+  // }
+  // else {
+  //   invitados.push(nombre);
+  //  localStorage.setItem("listaInvitados",invitados);
+  // }
 });
 
 generar.addEventListener("click", () => {
@@ -96,6 +125,8 @@ generar.addEventListener("click", () => {
 
 function addName(addbtn) {
   let name = addbtn.id;
+  select = document.getElementById(name).getAttribute("tag");
+  console.log(select);
   nombre = document.querySelector("#nombreInvitado");
   nombre.textContent = name;
 }
@@ -116,3 +147,16 @@ function wait(t) {
 }
 
 allGuest.addEventListener("click", allGuestsGenerate);
+
+guardar.addEventListener("click", () => {
+  select = parseInt(select);
+  let edad = document.querySelector("#edad").value;
+  let email = document.querySelector("#email").value;
+  const position = invitados.find((el) => el.id == select);
+
+  position.edad = edad;
+  position.email = email;
+
+  document.querySelector("#edad").value = "";
+  document.querySelector("#email").value = "";
+});
