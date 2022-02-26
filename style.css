@@ -7,19 +7,38 @@
 
 .panelControl {
     display: flex;
-    background-color: #ECECEC;
-    height: 10vh;
+    height: 15vh;
+    margin-bottom:2% ;
     
 }
-
-.monitor {
+.monitor{
     margin: auto;
     width: 30%;
+    height: 10vh;
+}
+.age {
+    margin:auto!important;
+    width: 20%!important;
+}
+
+.email{
+    width: 80%;
+   
 }
 
 .formArea {
-    width: 50%;
-    margin: auto;
+    width:100%;
+    display: inline-flex;
+    flex-wrap: nowrap;
+}
+
+.form-control{
+    width:80%;
+
+}
+
+.event{
+    margin-right:1%
 }
 
 .containerCards {
@@ -70,7 +89,8 @@
 
 
 .inputName {
-    margin: 5%;
+    margin: auto;
+  padding: 2%;
 }
 
 .footerContent {
@@ -123,4 +143,24 @@
 
 .centerElement{
     margin: auto;
+    text-align: center;
+    margin-bottom: 1%;
+}
+
+.save{
+    color: rgb(35, 255, 64);
+}
+
+.text{
+    color: #000;
+}
+
+.panelConfirm{
+    text-align: center;
+    display: none;
+}
+
+.accordion{
+    margin: auto;
+    width: 90%!important;
 }

@@ -83,13 +83,13 @@ agregar.addEventListener("click", () => {
   if (result == 100.0) {
     document
       .querySelector("#limite")
-      .setAttribute("style", "background-color:red;");
+      .setAttribute("style", "border:3px solid #f00;");
     document
       .querySelector("#cantidad")
-      .setAttribute("style", "background-color:red;");
+      .setAttribute("style", "border:3px solid #f00;");
     const test = document
       .querySelector("#porcentaje")
-      .setAttribute("style", "background-color:red;");
+      .setAttribute("style", "border:3px solid #f00;");
   }
   porcentajeOcupacion.textContent = result + "%";
   // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR SET Y GET EN LOCALSTORAGE A FUTURO *
@@ -117,10 +117,10 @@ generar.addEventListener("click", () => {
   fecha = document.querySelector("#fecha");
   direccion = document.querySelector("#direccion");
 
-  titulo.textContent = title;
-  detalles.textContent = details;
-  fecha.textContent = date;
-  direccion.textContent = address;
+  // titulo.textContent = title;
+  // detalles.textContent = details;
+  // fecha.textContent = date;
+  // direccion.textContent = address;
 });
 
 function addName(addbtn) {
@@ -132,12 +132,27 @@ function addName(addbtn) {
 }
 
 async function allGuestsGenerate() {
-  let nombre = document.querySelector("#nombreInvitado");
+  let cantidadCarne = 0;
+  let cantidadViggie = 0;
+  let cantidadCeliaco = 0;
+
+
   for (let i = 0; i < invitados.length; i++) {
-    await wait(2);
-    nombre.textContent = invitados[i];
-    console.log(invitados[i]);
+    if (invitados[i].dieta == "Carne") {
+      cantidadCarne++;
+    } else if (invitados[i].dieta == "Viggie") {
+      cantidadViggie++;
+    }else if(invitados[i].dieta == "Celiaco"){
+      cantidadCeliaco++;
+    }
+
+
   }
+
+document.querySelector("#cantCarne").textContent="Han preferido dieta de Carnes: "+cantidadCarne;
+document.querySelector("#cantViggie").textContent="Han preferido dieta Viggie: "+cantidadViggie;
+document.querySelector("#cantCeliaco").textContent="Han preferido dieta de Celiaca: "+cantidadCeliaco;
+
 }
 
 function wait(t) {
@@ -148,15 +163,29 @@ function wait(t) {
 
 allGuest.addEventListener("click", allGuestsGenerate);
 
-guardar.addEventListener("click", () => {
+guardar.addEventListener("click",async () => {
+  let dietaOpt;
   select = parseInt(select);
   let edad = document.querySelector("#edad").value;
   let email = document.querySelector("#email").value;
-  const position = invitados.find((el) => el.id == select);
+  let dieta = document.getElementsByName("dieta");
 
+  const position = invitados.find((el) => el.id == select);
+  console.log(dieta);
+  for (i = 0; i < dieta.length; i++) {
+    if (dieta[i].checked == true) {
+      dietaOpt = dieta[i].id;
+    }
+  }
   position.edad = edad;
   position.email = email;
-
+  position.dieta = dietaOpt;
   document.querySelector("#edad").value = "";
   document.querySelector("#email").value = "";
+  
+  if(position.edad && position.dieta && position.email){
+    document.querySelector("#confirmSave").setAttribute("style","display:block");
+    await wait(4);
+    document.querySelector("#confirmSave").setAttribute("style","display:none");
+  }
 });
