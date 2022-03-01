@@ -52,7 +52,7 @@
 }
 
 .event{
-    margin-right:1%;
+    margin-right:0.5%;
     margin-left:1%
 }
 
@@ -99,6 +99,9 @@
 
 }
 
+.time{
+    width: 50%;
+}
 
 .Card-text {
     display: flex;

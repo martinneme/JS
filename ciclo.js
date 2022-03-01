@@ -10,6 +10,7 @@ const porcentajeOcupacion = document.querySelector("#porcentajeOcupacion");
 
 let invitados = [];
 let flagLimiteInvitados = 0;
+let flagGenerate=0;
 let ultimoId = 0;
 let select;
 
@@ -18,12 +19,13 @@ cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
 class Evento{
-  constructor(name,description,address,date,time){
+  constructor(name,description,address,date,time,InvitadosLimite){
     this.name=name;
     this.description=description;
     this.address=address;
     this.date=date;
     this.time=time;
+    this.limiteInvitados=InvitadosLimite;
   }
 }
 
@@ -52,37 +54,38 @@ agregar.addEventListener("click", () => {
 
   if (nombre) {
     if (isNaN(nombre)) {
-      if (flagLimiteInvitados == 0) {
-        let cantidad = prompt("ingrese el limite total de invitados:");
-        limiteInvitados.textContent = cantidad;
-        flagLimiteInvitados = 1;
+      if (flagGenerate == '0') {
+         alert("Debes generar el evento primero");
+      }else{
+        const cardName = document.createElement("DIV");
+        const TagName = document.createElement("p");
+        const buttonAdd = document.createElement("button");
+  
+        cardName.classList.add("Card-Body");
+        cardName.classList.add("item");
+        TagName.classList.add("Card-text");
+        buttonAdd.classList.add("btn-primary");
+        buttonAdd.classList.add("btn");
+        buttonAdd.classList.add("add");
+  
+        TagName.textContent = nombre;
+        buttonAdd.setAttribute("tag", ultimoId);
+        buttonAdd.setAttribute("id", nombre);
+        buttonAdd.setAttribute("onclick", "addName(this)");
+        buttonAdd.textContent = ">";
+  
+        let codigoHTMl = cardName.appendChild(TagName);
+        codigoHTMl.appendChild(buttonAdd);
+  
+        document.querySelector("#item").appendChild(codigoHTMl);
+        document.querySelector("#invitado").value = "";
+  
+        const persona = new Persona(ultimoId, nombre, "", "", "");
+        invitados.push(persona);
+
       }
 
-      const cardName = document.createElement("DIV");
-      const TagName = document.createElement("p");
-      const buttonAdd = document.createElement("button");
-
-      cardName.classList.add("Card-Body");
-      cardName.classList.add("item");
-      TagName.classList.add("Card-text");
-      buttonAdd.classList.add("btn-primary");
-      buttonAdd.classList.add("btn");
-      buttonAdd.classList.add("add");
-
-      TagName.textContent = nombre;
-      buttonAdd.setAttribute("tag", ultimoId);
-      buttonAdd.setAttribute("id", nombre);
-      buttonAdd.setAttribute("onclick", "addName(this)");
-      buttonAdd.textContent = ">";
-
-      let codigoHTMl = cardName.appendChild(TagName);
-      codigoHTMl.appendChild(buttonAdd);
-
-      document.querySelector("#item").appendChild(codigoHTMl);
-      document.querySelector("#invitado").value = "";
-
-      const persona = new Persona(ultimoId, nombre, "", "", "");
-      invitados.push(persona);
+     
     }
   }
 
@@ -111,12 +114,24 @@ generar.addEventListener("click", () => {
   let address = document.querySelector("#address").value;
   let date = document.querySelector("#date").value;
   let time = document.querySelector("#time").value;
+  let InvitadosLimite = document.querySelector("#limit").value;
 
-
-const evento = new Evento(title,details,address,date,time);
+if(title != "" && details != "" && address != "" && date != "" && time != "" && InvitadosLimite != ""){
+  flagGenerate=1;
+}
+const evento = new Evento(title,details,address,date,time,InvitadosLimite);
 localStorage.setItem("Evento",JSON.stringify(evento));
-
+  const limit = document.querySelector("#limiteInvitados");
+limit.textContent=InvitadosLimite;
 location.hash = "#item";
+
+document.getElementById("title").value="";
+document.getElementById("details").value="";
+document.getElementById("address").value="";
+document.getElementById("title").value="";
+document.getElementById("date").value="";
+document.getElementById("time").value="";
+document.getElementById("limit").value="";
 
 });
 
