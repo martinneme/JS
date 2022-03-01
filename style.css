@@ -1,20 +1,20 @@
 .card-body {
     text-align: center;
+    height:80vh;
     margin: auto;
     width: 90%;
-    background-color: #ECECEC;
+   background-image:url("img/wordpress-events-plugin-1-1024x512.png") ;
+   background-repeat: no-repeat;
+   background-size:cover;
 }
 
-.panelControl {
-    display: flex;
-    height: 15vh;
-    margin-bottom:2% ;
-    
-}
+
 .monitor{
     margin: auto;
     width: 30%;
     height: 10vh;
+    background-color:#ECECEC ;
+    color:#000;
 }
 .age {
     margin:auto!important;
@@ -27,9 +27,23 @@
 }
 
 .formArea {
-    width:100%;
+    margin: auto;
+    padding: 3%;
+    width:90%;
     display: inline-flex;
     flex-wrap: nowrap;
+    background-color:#46cd88 ;
+    text-align: center;
+    
+}
+.panel{
+    text-align: center;
+    padding: 2%;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    height: 30%;
+    background-color: #46cd88;
 }
 
 .form-control{
@@ -38,27 +52,53 @@
 }
 
 .event{
-    margin-right:1%
+    margin-right:1%;
+    margin-left:1%
+}
+
+.sectionDos{
+    height: 90vh;
 }
 
 .containerCards {
     display: flex;
     margin: auto;
     width: 90%;
+   height: 70%;
     align-items: flex-start;
     justify-content: start;
+ 
 }
 
-.CardName,
-.invitation {
+.card{
+    border: none;
+}
+
+.CardName {
     width: 100%;
+    height: 100%;
+ overflow: scroll;
+ background-color: #46cd88;
+}
+
+.preference{
+    width: 100%;
+    height: 100%;
+ background-color: #46cd88;
+}
+
+.invitado{
+    text-align: center;
+    background-color: #46cd88;
+}
+
+.accordion-button{
+    background-color: #ECECEC!important;
+    color: #000!important;
+ 
 
 }
 
-.CardStyleInvitation {
-    margin: auto;
-    padding: 5%;
-}
 
 .Card-text {
     display: flex;
@@ -69,7 +109,7 @@
 
 .cardPreview {
     width: 100%;
-    height: 30%;
+    height: 100%;
 }
 
 .invitation {
@@ -115,7 +155,10 @@
 
 .btn-default {
     margin-top: 1%;
-    border-color: #515253;
+    border-color: #952fea;
+    background-color:  #952fea;
+    color: #fff;
+    
 }
 
 .btnCV {
@@ -160,7 +203,7 @@
     display: none;
 }
 
-.accordion{
+.WidthReport{
     margin: auto;
     width: 90%!important;
 }

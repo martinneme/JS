@@ -14,96 +14,103 @@
 
 <body>
     <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Organizador de eventos</h5>
-            <div class="panelControl">
-                <div class="card monitor" id="limite"> <label for="Limite invitados">Limite invitados</label>
-                    <p id="limiteInvitados">100</p>
-                </div>
-                <div class="card monitor" id="cantidad"> <label for="Cantidad de invitados">N° de
-                        invitados</label>
-                    <p id="cantidadDeInvitados">100</p>
-                </div>
-                <div class="card monitor" id="porcentaje"> <label for="Porcentaje de ocupacion">
-                        Ocupación</label>
-                    <p id="porcentajeOcupacion">100</p>
-                </div>
-
-            </div>
-            <p class="card-text">Ingresa los datos del evento</p>
-            <div class="formArea">
-
-               
-                <input type="text" class="form-control event" id="title" placeholder="Nombre del evento">
-                <input type="text" class="form-control event" id="details" placeholder="Descripción">
-                <input type="text" class="form-control event" id="address" placeholder="Dirección">
-                <input type="date" class="form-control event" id="date" placeholder="Fecha">
-                <button type="submit" id="generar" class="btn btn-default">Generar</button>
-
-            </div>
-
+        <div class="card-body init"></div>
+        <div class="formArea">
+            <B>NUEVO EVENTO</B>
+            <input type="text" class="form-control event" id="title" placeholder="Nombre del evento">
+            <input type="text" class="form-control event" id="details" placeholder="Descripción">
+            <input type="text" class="form-control event" id="address" placeholder="Dirección">
+            <input type="date" class="form-control event" id="date">
+            <input type="time" class="form-control event" id="time">
+            <button type="submit" id="generar" class="btn btn-default">Generar</button>
         </div>
     </div>
-    <div class="containerCards">
-        <div class="card CardName" id="item">
-            <form class="formArea" action="">
-                <div class="form-group inputName">
-                    <label for="text">Invitado</label>
-                    <input type="text" class="form-control inputName" id="invitado">
-                </div>
-            </form>
-            <button type="submit" id="submit" class="btn btn-primary">Agregar a la lista</button>
-        </div>
-        <div class="card cardPreview" id="templateCard">
-            <div class="card formInvitado">
-                <h2 id="nombreInvitado" class="centerElement"></h2>
-                <label for="Title" class="centerElement">Edad</label>
-                <input type="number" class="form-control age" id="edad">
-                <div class="centerElement">
-                    <p>Seleccione la preferencia del invitado</p>
-                    <div>
-                        <input type="radio" id="Carne" name="dieta" value="Carne" checked>
-                        <label for="Carne">Carne</label>
+    </div>
+    <section class="sectionDos">
+        <div class="containerCards">
+            <div class="card CardName" id="item">
+                <form class="card invitado" action="">
+                    <div class="form-group inputName">
+                        <label for="text">Invitado</label>
+                        <input type="text" class="form-control inputName" id="invitado">
                     </div>
+                </form>
+                <button type="submit" id="submit" class="btn btn-default">Agregar a la lista</button>
+            </div>
+            <div class="card cardPreview" id="templateCard">
+                <div class="card preference">
+                    <h2 id="nombreInvitado" class="centerElement"></h2>
+                    <label for="Title" class="centerElement">Edad</label>
+                    <input type="number" class="form-control age" id="edad">
+                    <div class="centerElement">
+                        <p>Seleccione la preferencia del invitado</p>
+                        <div>
+                            <input type="radio" id="Carne" name="dieta" value="Carne" checked>
+                            <label for="Carne">Carne</label>
+                        </div>
 
-                    <div>
-                        <input type="radio" id="Viggie" name="dieta" value="Viggie">
-                        <label for="Viggie">Viggie</label>
-                    </div>
+                        <div>
+                            <input type="radio" id="Viggie" name="dieta" value="Viggie">
+                            <label for="Viggie">Viggie</label>
+                        </div>
 
-                    <div>
-                        <input type="radio" id="Celiaco" name="dieta" value="Celiaco">
-                        <label for="Celiaco">Celiaco</label>
+                        <div>
+                            <input type="radio" id="Celiaco" name="dieta" value="Celiaco">
+                            <label for="Celiaco">Celiaco</label>
+                        </div>
                     </div>
+                    <label for="text" class="centerElement">E-Mail</label>
+                    <input type="email" class="form-control centerElement email" id="email">
+                    <div class="panelConfirm" id="confirmSave">
+                        <i class="icon-ok save">
+                            <p class="text">Guardado</p>
+                        </i>
+                    </div>
+                    <button type="submit" id="guardar" class="btn btn-default">Guardar</button>
                 </div>
-                <label for="text" class="centerElement">E-Mail</label>
-                <input type="text" class="form-control centerElement email" id="email">
-                <div class="panelConfirm" id="confirmSave">
-                 <i class="icon-ok save"><p class="text">Guardado</p></i> 
-                </div>
-                <button type="submit" id="guardar" class="btn btn-default">Guardar</button>
             </div>
         </div>
-    </div>
-    <div class="card containerCards">
-        <button type="submit" id="allGuest" class="btn btn-primary btn-width">Generar Reportes</button>
+        <div class="panel" id="panel">
+            <div class="card monitor" id="limite"> <label for="Limite invitados">Limite invitados</label>
+                <p id="limiteInvitados">100</p>
+            </div>
+            <div class="card monitor" id="cantidad"> <label for="Cantidad de invitados">N° de
+                    invitados</label>
+                <p id="cantidadDeInvitados">100</p>
+            </div>
+            <div class="card monitor" id="porcentaje"> <label for="Porcentaje de ocupacion">
+                    Ocupación</label>
+                <p id="porcentajeOcupacion">100</p>
+            </div>
+        </div>
+    </section>
+    <div class="card ">
+        <button type="submit" id="allGuest" class="btn btn-default WidthReport">Generar Reportes</button>
     </div>
     <div>
-        <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion WidthReport" id="accordionPanelsStayOpenExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                         data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                         aria-controls="panelsStayOpen-collapseOne">
-                        REPORTES
+                        <b class="reportStyle">REPORTES</b>
                     </button>
                 </h2>
                 <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
                     aria-labelledby="panelsStayOpen-headingOne">
                     <div class="accordion-body">
-                       <p id="cantCarne"></p>
-                       <p id="cantViggie"></p>
-                       <p id="cantCeliaco"></p>
+                        <div class="reportDiet"> 
+                        <p id="cantCarne"></p>
+                        <p id="cantViggie"></p>
+                        <p id="cantCeliaco"></p>
+                    </div>
+                    <div class="invitados">
+                        <ul id="ListInvitados">
+
+                        </ul>
+
+                    </div>
                     </div>
                 </div>
             </div>

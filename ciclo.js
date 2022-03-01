@@ -17,6 +17,16 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
+class Evento{
+  constructor(name,description,address,date,time){
+    this.name=name;
+    this.description=description;
+    this.address=address;
+    this.date=date;
+    this.time=time;
+  }
+}
+
 class Persona {
   constructor(id, nombre, edad, dieta, email) {
     this.id = id;
@@ -83,27 +93,16 @@ agregar.addEventListener("click", () => {
   if (result == 100.0) {
     document
       .querySelector("#limite")
-      .setAttribute("style", "border:3px solid #f00;");
+      .setAttribute("style", "border-bottom:3px solid #f00;");
     document
       .querySelector("#cantidad")
-      .setAttribute("style", "border:3px solid #f00;");
+      .setAttribute("style", "border-bottom:3px solid #f00;");
     const test = document
       .querySelector("#porcentaje")
-      .setAttribute("style", "border:3px solid #f00;");
+      .setAttribute("style", "border-bottom:3px solid #f00;");
   }
   porcentajeOcupacion.textContent = result + "%";
-  // * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR SET Y GET EN LOCALSTORAGE A FUTURO *
-  // if (localStorage.length != 0) {
-  //     let lista=[];
-  //   lista = GetInvitados();
-  //   lista.push(nombre);
-  //   localStorage.setItem("listaInvitados", lista);
 
-  // }
-  // else {
-  //   invitados.push(nombre);
-  //  localStorage.setItem("listaInvitados",invitados);
-  // }
 });
 
 generar.addEventListener("click", () => {
@@ -111,16 +110,14 @@ generar.addEventListener("click", () => {
   let details = document.querySelector("#details").value;
   let address = document.querySelector("#address").value;
   let date = document.querySelector("#date").value;
+  let time = document.querySelector("#time").value;
 
-  titulo = document.querySelector("#titulo");
-  detalles = document.querySelector("#detalle");
-  fecha = document.querySelector("#fecha");
-  direccion = document.querySelector("#direccion");
 
-  // titulo.textContent = title;
-  // detalles.textContent = details;
-  // fecha.textContent = date;
-  // direccion.textContent = address;
+const evento = new Evento(title,details,address,date,time);
+localStorage.setItem("Evento",JSON.stringify(evento));
+
+location.hash = "#item";
+
 });
 
 function addName(addbtn) {
@@ -152,6 +149,7 @@ async function allGuestsGenerate() {
 document.querySelector("#cantCarne").textContent="Han preferido dieta de Carnes: "+cantidadCarne;
 document.querySelector("#cantViggie").textContent="Han preferido dieta Viggie: "+cantidadViggie;
 document.querySelector("#cantCeliaco").textContent="Han preferido dieta de Celiaca: "+cantidadCeliaco;
+
 
 }
 
@@ -189,3 +187,4 @@ guardar.addEventListener("click",async () => {
     document.querySelector("#confirmSave").setAttribute("style","display:none");
   }
 });
+
