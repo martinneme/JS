@@ -126,12 +126,12 @@ limit.textContent=InvitadosLimite;
 location.hash = "#item";
 
 document.getElementById("title").value="";
-document.getElementById("details").value="";
-document.getElementById("address").value="";
-document.getElementById("title").value="";
-document.getElementById("date").value="";
-document.getElementById("time").value="";
-document.getElementById("limit").value="";
+document.getElementById("details"). value="";
+document.getElementById("address")  .value="";
+document.getElementById("title"). value="";
+document.getElementById("date").  value="";
+document.getElementById("time") .value="";
+document.getElementById("limit"). value="";
 
 });
 
