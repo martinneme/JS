@@ -60,6 +60,7 @@ agregar.addEventListener("click", () => {
         const cardName = document.createElement("DIV");
         const TagName = document.createElement("p");
         const buttonAdd = document.createElement("button");
+        const buttonDel = document.createElement("button");
   
         cardName.classList.add("Card-Body");
         cardName.classList.add("item");
@@ -67,15 +68,25 @@ agregar.addEventListener("click", () => {
         buttonAdd.classList.add("btn-primary");
         buttonAdd.classList.add("btn");
         buttonAdd.classList.add("add");
+        buttonDel.classList.add("btn-primary");
+        buttonDel.classList.add("btn");
+        buttonDel.classList.add("add");
   
         TagName.textContent = nombre;
+        TagName.setAttribute("id",ultimoId);
         buttonAdd.setAttribute("tag", ultimoId);
         buttonAdd.setAttribute("id", nombre);
         buttonAdd.setAttribute("onclick", "addName(this)");
         buttonAdd.textContent = ">";
+
+        buttonDel.setAttribute("tag", ultimoId);
+        buttonDel.setAttribute("id", nombre);
+        buttonDel.setAttribute("onclick", "delName(this)");
+        buttonDel.textContent = "Quitar";
   
         let codigoHTMl = cardName.appendChild(TagName);
         codigoHTMl.appendChild(buttonAdd);
+        codigoHTMl.appendChild(buttonDel);
   
         document.querySelector("#item").appendChild(codigoHTMl);
         document.querySelector("#invitado").value = "";
@@ -125,13 +136,21 @@ localStorage.setItem("Evento",JSON.stringify(evento));
 limit.textContent=InvitadosLimite;
 location.hash = "#item";
 
-document.getElementById("title").value="";
-document.getElementById("details"). value="";
-document.getElementById("address")  .value="";
-document.getElementById("title"). value="";
-document.getElementById("date").  value="";
-document.getElementById("time") .value="";
-document.getElementById("limit"). value="";
+// document.getElementById("title").value="";
+// document.getElementById("details"). value="";
+// document.getElementById("address")  .value="";
+// document.getElementById("title"). value="";
+// document.getElementById("date").  value="";
+// document.getElementById("time") .value="";
+// document.getElementById("limit"). value="";
+
+document.getElementById("title").disabled=true;
+document.getElementById("details").disabled=true;
+document.getElementById("address").disabled=true;
+document.getElementById("title").disabled=true;
+document.getElementById("date").disabled=true;
+document.getElementById("time").disabled=true;
+document.getElementById("limit").disabled=true;
 
 });
 
@@ -141,6 +160,21 @@ function addName(addbtn) {
   console.log(select);
   nombre = document.querySelector("#nombreInvitado");
   nombre.textContent = name;
+}
+
+
+function delName(delbtn) {
+  let name = delbtn.id;
+  const ele = document.getElementById(name).getAttribute("tag");
+  const item = document.getElementById(ele);
+  item.remove();
+
+  for (i = 0; i < invitados.length; i++) {
+    if(invitados[i].id == ele ){
+      invitados.splice(i,1);
+    }
+  } 
+  
 }
 
 async function allGuestsGenerate() {
@@ -184,7 +218,6 @@ guardar.addEventListener("click",async () => {
   let dieta = document.getElementsByName("dieta");
 
   const position = invitados.find((el) => el.id == select);
-  console.log(dieta);
   for (i = 0; i < dieta.length; i++) {
     if (dieta[i].checked == true) {
       dietaOpt = dieta[i].id;
