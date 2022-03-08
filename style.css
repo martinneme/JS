@@ -128,8 +128,15 @@
 
 .add {
     margin-left: 5%;
+    background-color: #952fea;
+    border: none;
 }
 
+.add:hover {
+    margin-left: 5%;
+    background-color: #fff;
+    color:#952fea;
+}
 
 .inputName {
     margin: auto;

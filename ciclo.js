@@ -8,9 +8,11 @@ const limiteInvitados = document.querySelector("#limiteInvitados");
 const cantidadDeInvitados = document.querySelector("#cantidadDeInvitados");
 const porcentajeOcupacion = document.querySelector("#porcentajeOcupacion");
 
+const reportlist = document.querySelector("#reportlist");
+
 let invitados = [];
 let flagLimiteInvitados = 0;
-let flagGenerate=0;
+let flagGenerate = 0;
 let ultimoId = 0;
 let select;
 
@@ -18,14 +20,14 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
-class Evento{
-  constructor(name,description,address,date,time,InvitadosLimite){
-    this.name=name;
-    this.description=description;
-    this.address=address;
-    this.date=date;
-    this.time=time;
-    this.limiteInvitados=InvitadosLimite;
+class Evento {
+  constructor(name, description, address, date, time, InvitadosLimite) {
+    this.name = name;
+    this.description = description;
+    this.address = address;
+    this.date = date;
+    this.time = time;
+    this.limiteInvitados = InvitadosLimite;
   }
 }
 
@@ -54,14 +56,14 @@ agregar.addEventListener("click", () => {
 
   if (nombre) {
     if (isNaN(nombre)) {
-      if (flagGenerate == '0') {
-         alert("Debes generar el evento primero");
-      }else{
+      if (flagGenerate == "0") {
+        alert("Debes generar el evento primero");
+      } else {
         const cardName = document.createElement("DIV");
         const TagName = document.createElement("p");
         const buttonAdd = document.createElement("button");
         const buttonDel = document.createElement("button");
-  
+
         cardName.classList.add("Card-Body");
         cardName.classList.add("item");
         TagName.classList.add("Card-text");
@@ -71,9 +73,9 @@ agregar.addEventListener("click", () => {
         buttonDel.classList.add("btn-primary");
         buttonDel.classList.add("btn");
         buttonDel.classList.add("add");
-  
+
         TagName.textContent = nombre;
-        TagName.setAttribute("id",ultimoId);
+        TagName.setAttribute("id", ultimoId);
         buttonAdd.setAttribute("tag", ultimoId);
         buttonAdd.setAttribute("id", nombre);
         buttonAdd.setAttribute("onclick", "addName(this)");
@@ -83,20 +85,17 @@ agregar.addEventListener("click", () => {
         buttonDel.setAttribute("id", nombre);
         buttonDel.setAttribute("onclick", "delName(this)");
         buttonDel.textContent = "Quitar";
-  
+
         let codigoHTMl = cardName.appendChild(TagName);
         codigoHTMl.appendChild(buttonAdd);
         codigoHTMl.appendChild(buttonDel);
-  
+
         document.querySelector("#item").appendChild(codigoHTMl);
         document.querySelector("#invitado").value = "";
-  
+
         const persona = new Persona(ultimoId, nombre, "", "", "");
         invitados.push(persona);
-
       }
-
-     
     }
   }
 
@@ -116,7 +115,6 @@ agregar.addEventListener("click", () => {
       .setAttribute("style", "border-bottom:3px solid #f00;");
   }
   porcentajeOcupacion.textContent = result + "%";
-
 });
 
 generar.addEventListener("click", () => {
@@ -127,79 +125,37 @@ generar.addEventListener("click", () => {
   let time = document.querySelector("#time").value;
   let InvitadosLimite = document.querySelector("#limit").value;
 
-if(title != "" && details != "" && address != "" && date != "" && time != "" && InvitadosLimite != ""){
-  flagGenerate=1;
-}
-const evento = new Evento(title,details,address,date,time,InvitadosLimite);
-localStorage.setItem("Evento",JSON.stringify(evento));
-  const limit = document.querySelector("#limiteInvitados");
-limit.textContent=InvitadosLimite;
-location.hash = "#item";
-
-// document.getElementById("title").value="";
-// document.getElementById("details"). value="";
-// document.getElementById("address")  .value="";
-// document.getElementById("title"). value="";
-// document.getElementById("date").  value="";
-// document.getElementById("time") .value="";
-// document.getElementById("limit"). value="";
-
-document.getElementById("title").disabled=true;
-document.getElementById("details").disabled=true;
-document.getElementById("address").disabled=true;
-document.getElementById("title").disabled=true;
-document.getElementById("date").disabled=true;
-document.getElementById("time").disabled=true;
-document.getElementById("limit").disabled=true;
-
+  if (title && details && address && date && time && InvitadosLimite) {
+    flagGenerate = 1;
+    const evento = new Evento(
+      title,
+      details,
+      address,
+      date,
+      time,
+      InvitadosLimite
+    );
+    localStorage.setItem("Evento", JSON.stringify(evento));
+    const limit = document.querySelector("#limiteInvitados");
+    limit.textContent = InvitadosLimite;
+    location.hash = "#item";
+    document.getElementById("title").disabled = true;
+    document.getElementById("details").disabled = true;
+    document.getElementById("address").disabled = true;
+    document.getElementById("title").disabled = true;
+    document.getElementById("date").disabled = true;
+    document.getElementById("time").disabled = true;
+    document.getElementById("limit").disabled = true;
+  } else {
+    alert("Debe completar todos los campos");
+  }
 });
 
 function addName(addbtn) {
   let name = addbtn.id;
   select = document.getElementById(name).getAttribute("tag");
-  console.log(select);
   nombre = document.querySelector("#nombreInvitado");
   nombre.textContent = name;
-}
-
-
-function delName(delbtn) {
-  let name = delbtn.id;
-  const ele = document.getElementById(name).getAttribute("tag");
-  const item = document.getElementById(ele);
-  item.remove();
-
-  for (i = 0; i < invitados.length; i++) {
-    if(invitados[i].id == ele ){
-      invitados.splice(i,1);
-    }
-  } 
-  
-}
-
-async function allGuestsGenerate() {
-  let cantidadCarne = 0;
-  let cantidadViggie = 0;
-  let cantidadCeliaco = 0;
-
-
-  for (let i = 0; i < invitados.length; i++) {
-    if (invitados[i].dieta == "Carne") {
-      cantidadCarne++;
-    } else if (invitados[i].dieta == "Viggie") {
-      cantidadViggie++;
-    }else if(invitados[i].dieta == "Celiaco"){
-      cantidadCeliaco++;
-    }
-
-
-  }
-
-document.querySelector("#cantCarne").textContent="Han preferido dieta de Carnes: "+cantidadCarne;
-document.querySelector("#cantViggie").textContent="Han preferido dieta Viggie: "+cantidadViggie;
-document.querySelector("#cantCeliaco").textContent="Han preferido dieta de Celiaca: "+cantidadCeliaco;
-
-
 }
 
 function wait(t) {
@@ -208,9 +164,63 @@ function wait(t) {
   });
 }
 
+function delName(delbtn) {
+  let name = delbtn.id;
+  const ele = document.getElementById(name).getAttribute("tag");
+  const item = document.getElementById(ele);
+  item.remove();
+
+  for (i = 0; i < invitados.length; i++) {
+    if (invitados[i].id == ele) {
+      invitados.splice(i, 1);
+    }
+  }
+}
+
+async function allGuestsGenerate() {
+  let cantidadCarne = 0;
+  let cantidadViggie = 0;
+  let cantidadCeliaco = 0;
+  let adult=0;
+  let children=0;
+
+
+
+  for (let i = 0; i < invitados.length; i++) {
+    if (invitados[i].dieta == "Carne") {
+      cantidadCarne++;
+    } else if (invitados[i].dieta == "Viggie") {
+      cantidadViggie++;
+    } else if (invitados[i].dieta == "Celiaco") {
+      cantidadCeliaco++;
+    }
+
+    if(invitados[i].edad>=18){
+      adult++;
+    }else{
+      children++
+    }
+  }
+
+  
+
+  document.querySelector("#cantCarne").textContent =
+    "Han preferido dieta de Carnes: " + cantidadCarne;
+  document.querySelector("#cantViggie").textContent =
+    "Han preferido dieta Viggie: " + cantidadViggie;
+  document.querySelector("#cantCeliaco").textContent =
+    "Han preferido dieta de Celiaca: " + cantidadCeliaco;
+  document.querySelector("#adulto").textContent = "Hay "+adult +" personas adultas" ;
+  document.querySelector("#menor").textContent = "Hay "+children+" personas menores de edad" ;
+
+
+}
+
+
+
 allGuest.addEventListener("click", allGuestsGenerate);
 
-guardar.addEventListener("click",async () => {
+guardar.addEventListener("click", async () => {
   let dietaOpt;
   select = parseInt(select);
   let edad = document.querySelector("#edad").value;
@@ -228,11 +238,14 @@ guardar.addEventListener("click",async () => {
   position.dieta = dietaOpt;
   document.querySelector("#edad").value = "";
   document.querySelector("#email").value = "";
-  
-  if(position.edad && position.dieta && position.email){
-    document.querySelector("#confirmSave").setAttribute("style","display:block");
+
+  if (position.edad && position.dieta && position.email) {
+    document
+      .querySelector("#confirmSave")
+      .setAttribute("style", "display:block");
     await wait(4);
-    document.querySelector("#confirmSave").setAttribute("style","display:none");
+    document
+      .querySelector("#confirmSave")
+      .setAttribute("style", "display:none");
   }
 });
-
