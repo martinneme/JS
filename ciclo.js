@@ -139,13 +139,9 @@ generar.addEventListener("click", () => {
     const limit = document.querySelector("#limiteInvitados");
     limit.textContent = InvitadosLimite;
     location.hash = "#item";
-    document.getElementById("title").disabled = true;
-    document.getElementById("details").disabled = true;
-    document.getElementById("address").disabled = true;
-    document.getElementById("title").disabled = true;
-    document.getElementById("date").disabled = true;
-    document.getElementById("time").disabled = true;
-    document.getElementById("limit").disabled = true;
+
+    disabledEventInput(true);
+    
   } else {
     alert("Debe completar todos los campos");
   }
@@ -181,10 +177,8 @@ async function allGuestsGenerate() {
   let cantidadCarne = 0;
   let cantidadViggie = 0;
   let cantidadCeliaco = 0;
-  let adult=0;
-  let children=0;
-
-
+  let adult = 0;
+  let children = 0;
 
   for (let i = 0; i < invitados.length; i++) {
     if (invitados[i].dieta == "Carne") {
@@ -195,14 +189,12 @@ async function allGuestsGenerate() {
       cantidadCeliaco++;
     }
 
-    if(invitados[i].edad>=18){
+    if (invitados[i].edad >= 18) {
       adult++;
-    }else{
-      children++
+    } else {
+      children++;
     }
   }
-
-  
 
   document.querySelector("#cantCarne").textContent =
     "Han preferido dieta de Carnes: " + cantidadCarne;
@@ -210,13 +202,11 @@ async function allGuestsGenerate() {
     "Han preferido dieta Viggie: " + cantidadViggie;
   document.querySelector("#cantCeliaco").textContent =
     "Han preferido dieta de Celiaca: " + cantidadCeliaco;
-  document.querySelector("#adulto").textContent = "Hay "+adult +" personas adultas" ;
-  document.querySelector("#menor").textContent = "Hay "+children+" personas menores de edad" ;
-
-
+  document.querySelector("#adulto").textContent =
+    "Hay " + adult + " personas adultas";
+  document.querySelector("#menor").textContent =
+    "Hay " + children + " personas menores de edad";
 }
-
-
 
 allGuest.addEventListener("click", allGuestsGenerate);
 
@@ -249,3 +239,63 @@ guardar.addEventListener("click", async () => {
       .setAttribute("style", "display:none");
   }
 });
+
+window.addEventListener("load", () => {
+  if (localStorage.getItem("Evento")) {
+    let myModal = new bootstrap.Modal(
+      document.getElementById("staticBackdrop"),
+      {
+        keyboard: true,
+      }
+    );
+    let mod = document.querySelector("#staticBackdrop");
+
+    let event = JSON.parse(localStorage.getItem("Evento"));
+
+    let PreviewEvent = `<p><b>Evento:</b> ${event.name}<br>
+    <b>Descricion:</b> ${event.description}<br>
+    <b>Direccion:</b> ${event.address}<br>
+    <b>Fecha :</b>${event.date}</p>
+                        `;
+    const modalBody = document.querySelector("#eventSave");
+    modalBody.innerHTML = PreviewEvent;
+    myModal.show(mod);
+  }
+});
+
+let clear = document.querySelector("#delEvent");
+let editEvent = document.querySelector("#continueEvent");
+
+clear.addEventListener("click",()=>{
+  localStorage.removeItem("Evento");
+})
+
+editEvent.addEventListener("click",()=>{
+  flagGenerate=1;
+  let mod = document.getElementById("close");
+  mod.click();
+
+  let event = JSON.parse(localStorage.getItem("Evento"));
+
+  let title = document.querySelector("#title").value= event.name;
+  let details = document.querySelector("#details").value=event.description;
+  let address = document.querySelector("#address").value=event.address;
+  // let date = document.querySelector("#date").setDate()= date;
+  // // let time = document.querySelector("#time").value="15:30";
+  // let InvitadosLimite = document.querySelector("#limit").value="11"
+  disabledEventInput(true);
+
+})
+
+
+function disabledEventInput(value){
+ 
+    document.getElementById("title").disabled = value;
+    document.getElementById("details").disabled = value;
+    document.getElementById("address").disabled = value;
+    document.getElementById("title").disabled = value;
+    document.getElementById("date").disabled = value;
+    document.getElementById("time").disabled = value;
+    document.getElementById("limit").disabled = value;
+
+}
