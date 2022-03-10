@@ -1,3 +1,25 @@
+// document.addEventListener("DOMContentLoader",()=>{
+//PENDIENTE REVISAR SCOPE DE VARIABLES PORQUE AL INTEGRARLO ROMPE ALGUNAS FUNCIONES.
+// });
+
+class Evento {
+  constructor(name, description, address, date, time, InvitadosLimite) {
+    this.name = name;
+    this.description = description;
+    this.address = address;
+    this.date = date;
+    this.time = time;
+    this.limiteInvitados = InvitadosLimite;
+  }
+}
+
+class Persona {
+  constructor(id, nombre, edad, dieta, email) {
+    this.id = id;
+    this.nombre = nombre;
+  }
+}
+
 const agregar = document.querySelector("#submit");
 const generar = document.querySelector("#generar");
 const guardar = document.querySelector("#guardar");
@@ -20,34 +42,7 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
-class Evento {
-  constructor(name, description, address, date, time, InvitadosLimite) {
-    this.name = name;
-    this.description = description;
-    this.address = address;
-    this.date = date;
-    this.time = time;
-    this.limiteInvitados = InvitadosLimite;
-  }
-}
 
-class Persona {
-  constructor(id, nombre, edad, dieta, email) {
-    this.id = id;
-    this.nombre = nombre;
-  }
-}
-
-// * FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR GET EN LOCALSTORAGE A FUTURO *
-// function GetInvitados() {
-//   let lista = localStorage.getItem("listaInvitados");
-//   return lista;
-// }
-
-function generarID(ultimoId) {
-  let id = ultimoId + 1;
-  return id;
-}
 
 agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
@@ -141,7 +136,6 @@ generar.addEventListener("click", () => {
     location.hash = "#item";
 
     disabledEventInput(true);
-    
   } else {
     alert("Debe completar todos los campos");
   }
@@ -266,36 +260,54 @@ window.addEventListener("load", () => {
 let clear = document.querySelector("#delEvent");
 let editEvent = document.querySelector("#continueEvent");
 
-clear.addEventListener("click",()=>{
+//*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
+//* clear remueve el evento anterior.
+clear.addEventListener("click", () => {
   localStorage.removeItem("Evento");
-})
+});
 
-editEvent.addEventListener("click",()=>{
-  flagGenerate=1;
+//*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
+//* cambia la marca que permite iniciar la carga de invitados y mantiene el evento en localstorage
+editEvent.addEventListener("click", () => {
+  flagGenerate = 1;
   let mod = document.getElementById("close");
   mod.click();
 
   let event = JSON.parse(localStorage.getItem("Evento"));
 
-  let title = document.querySelector("#title").value= event.name;
-  let details = document.querySelector("#details").value=event.description;
-  let address = document.querySelector("#address").value=event.address;
+  document.querySelector("#title").value = event.name;
+  document.querySelector("#details").value = event.description;
+  document.querySelector("#address").value = event.address;
+  // PENDIENTE AGREGAR ESTOS VALORES POR FORMATO
   // let date = document.querySelector("#date").setDate()= date;
   // // let time = document.querySelector("#time").value="15:30";
   // let InvitadosLimite = document.querySelector("#limit").value="11"
   disabledEventInput(true);
+});
 
-})
+//* FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR GET EN LOCALSTORAGE A FUTURO *
+// function GetInvitados() {
+//   let lista = localStorage.getItem("listaInvitados");
+//   return lista;
+// }
 
+// function SaveInvitados(persona) {
+//   let lista = GetInvitados();
+//   for (i = 0; i < lista.length; i++) {}
+// }
 
-function disabledEventInput(value){
- 
-    document.getElementById("title").disabled = value;
-    document.getElementById("details").disabled = value;
-    document.getElementById("address").disabled = value;
-    document.getElementById("title").disabled = value;
-    document.getElementById("date").disabled = value;
-    document.getElementById("time").disabled = value;
-    document.getElementById("limit").disabled = value;
+// function generarID(ultimoId) {
+//   let id = ultimoId + 1;
+//   return id;
+// }
 
+// FUNCION QUE SWITCHEA LOS INPUT GENERACION DE EVENTO
+function disabledEventInput(value) {
+  document.getElementById("title").disabled = value;
+  document.getElementById("details").disabled = value;
+  document.getElementById("address").disabled = value;
+  document.getElementById("title").disabled = value;
+  document.getElementById("date").disabled = value;
+  document.getElementById("time").disabled = value;
+  document.getElementById("limit").disabled = value;
 }
