@@ -42,7 +42,10 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
-
+function generarID(ultimoId) {
+  let id = ultimoId + 1;
+  return id;
+}
 
 agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
@@ -296,10 +299,7 @@ editEvent.addEventListener("click", () => {
 //   for (i = 0; i < lista.length; i++) {}
 // }
 
-// function generarID(ultimoId) {
-//   let id = ultimoId + 1;
-//   return id;
-// }
+
 
 // FUNCION QUE SWITCHEA LOS INPUT GENERACION DE EVENTO
 function disabledEventInput(value) {
