@@ -151,11 +151,7 @@ function addName(addbtn) {
   nombre.textContent = name;
 }
 
-function wait(t) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, t * 1000);
-  });
-}
+
 
 function delName(delbtn) {
   let name = delbtn.id;
