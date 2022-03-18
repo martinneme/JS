@@ -3,13 +3,13 @@
 // });
 
 class Evento {
-  constructor(name, description, address, date, time, InvitadosLimite) {
+  constructor(name, description, address, date, time, invitadosLimite) {
     this.name = name;
     this.description = description;
     this.address = address;
     this.date = date;
     this.time = time;
-    this.limiteInvitados = InvitadosLimite;
+    this.limiteInvitados = invitadosLimite;
   }
 }
 
@@ -57,14 +57,14 @@ agregar.addEventListener("click", () => {
       if (flagGenerate == "0") {
         alert("Debes generar el evento primero");
       } else {
-        const cardName = document.createElement("DIV");
-        const TagName = document.createElement("p");
+        const cardName = document.createElement("div");
+        const tagName = document.createElement("p");
         const buttonAdd = document.createElement("button");
         const buttonDel = document.createElement("button");
 
         cardName.classList.add("Card-Body");
         cardName.classList.add("item");
-        TagName.classList.add("Card-text");
+        tagName.classList.add("Card-text");
         buttonAdd.classList.add("btn-primary");
         buttonAdd.classList.add("btn");
         buttonAdd.classList.add("add");
@@ -72,8 +72,8 @@ agregar.addEventListener("click", () => {
         buttonDel.classList.add("btn");
         buttonDel.classList.add("add");
 
-        TagName.textContent = nombre;
-        TagName.setAttribute("id", ultimoId);
+        tagName.textContent = nombre;
+        tagName.setAttribute("id", ultimoId);
         buttonAdd.setAttribute("tag", ultimoId);
         buttonAdd.setAttribute("id", nombre);
         buttonAdd.setAttribute("onclick", "addName(this)");
@@ -84,7 +84,7 @@ agregar.addEventListener("click", () => {
         buttonDel.setAttribute("onclick", "delName(this)");
         buttonDel.textContent = "Quitar";
 
-        let codigoHTMl = cardName.appendChild(TagName);
+        let codigoHTMl = cardName.appendChild(tagName);
         codigoHTMl.appendChild(buttonAdd);
         codigoHTMl.appendChild(buttonDel);
 
@@ -98,8 +98,8 @@ agregar.addEventListener("click", () => {
   }
 
   cantidadDeInvitados.textContent = invitados.length;
-  let AltInvit = invitados.length;
-  let result = (AltInvit * 100) / parseInt(limiteInvitados.textContent);
+  let altInvit = invitados.length;
+  let result = (altInvit * 100) / parseInt(limiteInvitados.textContent);
   result = result.toFixed(2);
   if (result == 100.0) {
     document
@@ -121,9 +121,9 @@ generar.addEventListener("click", () => {
   let address = document.querySelector("#address").value;
   let date = document.querySelector("#date").value;
   let time = document.querySelector("#time").value;
-  let InvitadosLimite = document.querySelector("#limit").value;
+  let invitadosLimite = document.querySelector("#limit").value;
 
-  if (title && details && address && date && time && InvitadosLimite) {
+  if (title && details && address && date && time && invitadosLimite) {
     flagGenerate = 1;
     const evento = new Evento(
       title,
@@ -131,11 +131,11 @@ generar.addEventListener("click", () => {
       address,
       date,
       time,
-      InvitadosLimite
+      invitadosLimite
     );
     localStorage.setItem("Evento", JSON.stringify(evento));
     const limit = document.querySelector("#limiteInvitados");
-    limit.textContent = InvitadosLimite;
+    limit.textContent = invitadosLimite;
     location.hash = "#item";
 
     disabledEventInput(true);
@@ -170,7 +170,7 @@ function delName(delbtn) {
   }
 }
 
-async function allGuestsGenerate() {
+function allGuestsGenerate() {
   let cantidadCarne = 0;
   let cantidadViggie = 0;
   let cantidadCeliaco = 0;
@@ -207,7 +207,7 @@ async function allGuestsGenerate() {
 
 allGuest.addEventListener("click", allGuestsGenerate);
 
-guardar.addEventListener("click", async () => {
+guardar.addEventListener("click", () => {
   let dietaOpt;
   select = parseInt(select);
   let edad = document.querySelector("#edad").value;
@@ -230,10 +230,12 @@ guardar.addEventListener("click", async () => {
     document
       .querySelector("#confirmSave")
       .setAttribute("style", "display:block");
-    await wait(4);
-    document
-      .querySelector("#confirmSave")
-      .setAttribute("style", "display:none");
+      setTimeout(function(){
+        document
+        .querySelector("#confirmSave")
+        .setAttribute("style", "display:none");
+    },4000);
+  
   }
 });
 
@@ -249,13 +251,13 @@ window.addEventListener("load", () => {
 
     let event = JSON.parse(localStorage.getItem("Evento"));
 
-    let PreviewEvent = `<p><b>Evento:</b> ${event.name}<br>
+    let previewEvent = `<p><b>Evento:</b> ${event.name}<br>
     <b>Descricion:</b> ${event.description}<br>
     <b>Direccion:</b> ${event.address}<br>
     <b>Fecha :</b>${event.date}</p>
                         `;
     const modalBody = document.querySelector("#eventSave");
-    modalBody.innerHTML = PreviewEvent;
+    modalBody.innerHTML = previewEvent;
     myModal.show(mod);
   }
 });
@@ -284,7 +286,7 @@ editEvent.addEventListener("click", () => {
   // PENDIENTE AGREGAR ESTOS VALORES POR FORMATO
   // let date = document.querySelector("#date").setDate()= date;
   // // let time = document.querySelector("#time").value="15:30";
-  // let InvitadosLimite = document.querySelector("#limit").value="11"
+  // let invitadosLimite = document.querySelector("#limit").value="11"
   disabledEventInput(true);
 });
 
