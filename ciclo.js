@@ -14,7 +14,7 @@ class Evento {
 }
 
 class Persona {
-  constructor(id, nombre, edad, dieta, email) {
+  constructor(id, nombre) {
     this.id = id;
     this.nombre = nombre;
   }
@@ -37,6 +37,7 @@ let flagLimiteInvitados = 0;
 let flagGenerate = 0;
 let ultimoId = 0;
 let select;
+let eventVar = {};
 
 limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
@@ -91,8 +92,9 @@ agregar.addEventListener("click", () => {
         document.querySelector("#item").appendChild(codigoHTMl);
         document.querySelector("#invitado").value = "";
 
-        const persona = new Persona(ultimoId, nombre, "", "", "");
+        const persona = new Persona(ultimoId, nombre);
         invitados.push(persona);
+
       }
     }
   }
@@ -134,9 +136,10 @@ generar.addEventListener("click", () => {
       invitadosLimite
     );
     localStorage.setItem("Evento", JSON.stringify(evento));
+    eventVar = evento;
     const limit = document.querySelector("#limiteInvitados");
     limit.textContent = invitadosLimite;
-    location.hash = "#item";
+    location.hash = "#sectionDos";
 
     disabledEventInput(true);
   } else {
@@ -150,8 +153,6 @@ function addName(addbtn) {
   nombre = document.querySelector("#nombreInvitado");
   nombre.textContent = name;
 }
-
-
 
 function delName(delbtn) {
   let name = delbtn.id;
@@ -182,11 +183,7 @@ function allGuestsGenerate() {
       cantidadCeliaco++;
     }
 
-    if (invitados[i].edad >= 18) {
-      adult++;
-    } else {
-      children++;
-    }
+    invitados[i].edad >= 18 ? adult++ : children++;
   }
 
   document.querySelector("#cantCarne").textContent =
@@ -226,63 +223,71 @@ guardar.addEventListener("click", () => {
     document
       .querySelector("#confirmSave")
       .setAttribute("style", "display:block");
-      setTimeout(function(){
-        document
+    setTimeout(function () {
+      document
         .querySelector("#confirmSave")
         .setAttribute("style", "display:none");
-    },4000);
-  
+    }, 4000);
+
+    eventVar = JSON.parse(localStorage.getItem("Evento"));
+    eventVar.invitados = invitados;
+    localStorage.setItem("Evento", JSON.stringify(eventVar));
+
+    
   }
 });
 
 window.addEventListener("load", () => {
-  if (localStorage.getItem("Evento")) {
-    let myModal = new bootstrap.Modal(
-      document.getElementById("staticBackdrop"),
-      {
-        keyboard: true,
-      }
-    );
-    let mod = document.querySelector("#staticBackdrop");
-
-    let event = JSON.parse(localStorage.getItem("Evento"));
-
-    let previewEvent = `<p><b>Evento:</b> ${event.name}<br>
-    <b>Descricion:</b> ${event.description}<br>
-    <b>Direccion:</b> ${event.address}<br>
-    <b>Fecha :</b>${event.date}</p>
-                        `;
-    const modalBody = document.querySelector("#eventSave");
-    modalBody.innerHTML = previewEvent;
-    myModal.show(mod);
-  }
+  localStorage.getItem("Evento")
+    ? showModal()
+    : console.log("no hay evento previo");
 });
 
-let clear = document.querySelector("#delEvent");
-let editEvent = document.querySelector("#continueEvent");
+function showModal() {
+  let myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"), {
+    keyboard: true,
+  });
+
+  let mod = document.querySelector("#staticBackdrop");
+
+  const {name,description,address,date} = JSON.parse(localStorage.getItem("Evento"));
+
+  let previewEvent = `<p><b>Evento:</b> ${name}</p>
+    <p><b>Descricion:</b> ${description}</p>
+    <p><b>Direccion:</b> ${address}</p>
+    <p><b>Fecha :</b>${date}</p>
+                        `;
+  const modalBody = document.querySelector("#eventSave");
+  modalBody.innerHTML = previewEvent;
+  myModal.show(mod);
+}
 
 //*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
+let clear = document.querySelector("#delEvent");
 //* clear remueve el evento anterior.
 clear.addEventListener("click", () => {
   localStorage.removeItem("Evento");
 });
 
 //*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
+let editEvent = document.querySelector("#continueEvent");
+
 //* cambia la marca que permite iniciar la carga de invitados y mantiene el evento en localstorage
 editEvent.addEventListener("click", () => {
   flagGenerate = 1;
   let mod = document.getElementById("close");
   mod.click();
 
-  let event = JSON.parse(localStorage.getItem("Evento"));
+  eventVar = JSON.parse(localStorage.getItem("Evento"));
 
-  document.querySelector("#title").value = event.name;
-  document.querySelector("#details").value = event.description;
-  document.querySelector("#address").value = event.address;
+  document.querySelector("#title").value = eventVar.name;
+  document.querySelector("#details").value = eventVar.description;
+  document.querySelector("#address").value = eventVar.address;
   // PENDIENTE AGREGAR ESTOS VALORES POR FORMATO
-  // let date = document.querySelector("#date").setDate()= date;
-  // // let time = document.querySelector("#time").value="15:30";
-  // let invitadosLimite = document.querySelector("#limit").value="11"
+  document.querySelector("#date").value = eventVar.date;
+  document.querySelector("#time").value = eventVar.time;
+  document.querySelector("#limit").value = eventVar.limiteInvitados;
+  location.hash = "#sectionDos";
   disabledEventInput(true);
 });
 
@@ -297,8 +302,6 @@ editEvent.addEventListener("click", () => {
 //   for (i = 0; i < lista.length; i++) {}
 // }
 
-
-
 // FUNCION QUE SWITCHEA LOS INPUT GENERACION DE EVENTO
 function disabledEventInput(value) {
   document.getElementById("title").disabled = value;
@@ -308,4 +311,5 @@ function disabledEventInput(value) {
   document.getElementById("date").disabled = value;
   document.getElementById("time").disabled = value;
   document.getElementById("limit").disabled = value;
+  document.querySelector("#generar").disabled=value;
 }
