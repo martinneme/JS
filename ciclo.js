@@ -94,7 +94,6 @@ agregar.addEventListener("click", () => {
 
         const persona = new Persona(ultimoId, nombre);
         invitados.push(persona);
-
       }
     }
   }
@@ -232,15 +231,24 @@ guardar.addEventListener("click", () => {
     eventVar = JSON.parse(localStorage.getItem("Evento"));
     eventVar.invitados = invitados;
     localStorage.setItem("Evento", JSON.stringify(eventVar));
-
-    
   }
 });
+
+
+function welcome(){
+  Swal.fire({
+    title: 'Bienvenido',
+    text: 'Comencemos!',
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 1500
+  })
+}
 
 window.addEventListener("load", () => {
   localStorage.getItem("Evento")
     ? showModal()
-    : console.log("no hay evento previo");
+    : welcome();
 });
 
 function showModal() {
@@ -250,7 +258,9 @@ function showModal() {
 
   let mod = document.querySelector("#staticBackdrop");
 
-  const {name,description,address,date} = JSON.parse(localStorage.getItem("Evento"));
+  const { name, description, address, date } = JSON.parse(
+    localStorage.getItem("Evento")
+  );
 
   let previewEvent = `<p><b>Evento:</b> ${name}</p>
     <p><b>Descricion:</b> ${description}</p>
@@ -311,5 +321,5 @@ function disabledEventInput(value) {
   document.getElementById("date").disabled = value;
   document.getElementById("time").disabled = value;
   document.getElementById("limit").disabled = value;
-  document.querySelector("#generar").disabled=value;
+  document.querySelector("#generar").disabled = value;
 }
