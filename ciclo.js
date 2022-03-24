@@ -2,6 +2,12 @@
 //PENDIENTE REVISAR SCOPE DE VARIABLES PORQUE AL INTEGRARLO ROMPE ALGUNAS FUNCIONES.
 // });
 
+
+
+
+
+
+
 class Evento {
   constructor(name, description, address, date, time, invitadosLimite) {
     this.name = name;
@@ -219,15 +225,7 @@ guardar.addEventListener("click", () => {
   document.querySelector("#email").value = "";
 
   if (position.edad && position.dieta && position.email) {
-    document
-      .querySelector("#confirmSave")
-      .setAttribute("style", "display:block");
-    setTimeout(function () {
-      document
-        .querySelector("#confirmSave")
-        .setAttribute("style", "display:none");
-    }, 4000);
-
+    toastSave.showToast();
     eventVar = JSON.parse(localStorage.getItem("Evento"));
     eventVar.invitados = invitados;
     localStorage.setItem("Evento", JSON.stringify(eventVar));
@@ -249,6 +247,8 @@ window.addEventListener("load", () => {
   localStorage.getItem("Evento")
     ? showModal()
     : welcome();
+
+
 });
 
 function showModal() {
@@ -323,3 +323,22 @@ function disabledEventInput(value) {
   document.getElementById("limit").disabled = value;
   document.querySelector("#generar").disabled = value;
 }
+
+
+const toastSave = Toastify({
+  text: "Guardado!",
+  duration: 3000,
+  newWindow: true,
+  gravity: "top", // `top` or `bottom`
+  position: "right", // `left`, `center` or `right`
+  stopOnFocus: true, // Prevents dismissing of toast on hover
+  style: {
+    background: "#ECECEC",
+    color:"Green",
+  },
+  onClick: function(){} 
+});
+
+
+
+
