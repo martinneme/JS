@@ -2,12 +2,6 @@
 //PENDIENTE REVISAR SCOPE DE VARIABLES PORQUE AL INTEGRARLO ROMPE ALGUNAS FUNCIONES.
 // });
 
-
-
-
-
-
-
 class Evento {
   constructor(name, description, address, date, time, invitadosLimite) {
     this.name = name;
@@ -35,7 +29,7 @@ const allGuest = document.querySelector("#allGuest");
 const limiteInvitados = document.querySelector("#limiteInvitados");
 const cantidadDeInvitados = document.querySelector("#cantidadDeInvitados");
 const porcentajeOcupacion = document.querySelector("#porcentajeOcupacion");
-
+const limit = document.querySelector("#limiteInvitados");
 const reportlist = document.querySelector("#reportlist");
 
 let invitados = [];
@@ -103,7 +97,10 @@ agregar.addEventListener("click", () => {
       }
     }
   }
+  panelInvitados();
+});
 
+function panelInvitados() {
   cantidadDeInvitados.textContent = invitados.length;
   let altInvit = invitados.length;
   let result = (altInvit * 100) / parseInt(limiteInvitados.textContent);
@@ -120,7 +117,7 @@ agregar.addEventListener("click", () => {
       .setAttribute("style", "border-bottom:3px solid #f00;");
   }
   porcentajeOcupacion.textContent = result + "%";
-});
+}
 
 generar.addEventListener("click", () => {
   let title = document.querySelector("#title").value;
@@ -142,7 +139,7 @@ generar.addEventListener("click", () => {
     );
     localStorage.setItem("Evento", JSON.stringify(evento));
     eventVar = evento;
-    const limit = document.querySelector("#limiteInvitados");
+
     limit.textContent = invitadosLimite;
     location.hash = "#sectionDos";
 
@@ -172,7 +169,7 @@ function delName(delbtn) {
   }
 }
 
-function allGuestsGenerate() {
+async function allGuestsGenerate() {
   let cantidadCarne = 0;
   let cantidadViggie = 0;
   let cantidadCeliaco = 0;
@@ -191,12 +188,16 @@ function allGuestsGenerate() {
     invitados[i].edad >= 18 ? adult++ : children++;
   }
 
+   const priceCarne = await GetPriceMenu("carne");
+  const priceVegano = await GetPriceMenu("vegano");
+  const priceCeliaco = await GetPriceMenu("celiaco");
+
   document.querySelector("#cantCarne").textContent =
-    "Han preferido dieta de Carnes: " + cantidadCarne;
+    "Han preferido dieta de Carnes: " + cantidadCarne+" y un presupuesto de $"+ priceCarne*cantidadCarne;
   document.querySelector("#cantViggie").textContent =
-    "Han preferido dieta Viggie: " + cantidadViggie;
+    "Han preferido dieta Viggie: " + cantidadViggie+" y un presupuesto de $"+ priceVegano*cantidadViggie;
   document.querySelector("#cantCeliaco").textContent =
-    "Han preferido dieta de Celiaca: " + cantidadCeliaco;
+    "Han preferido dieta de Celiaca: " + cantidadCeliaco+" y un presupuesto de $"+ priceCeliaco*cantidadCeliaco;
   document.querySelector("#adulto").textContent =
     "Hay " + adult + " personas adultas";
   document.querySelector("#menor").textContent =
@@ -230,25 +231,22 @@ guardar.addEventListener("click", () => {
     eventVar.invitados = invitados;
     localStorage.setItem("Evento", JSON.stringify(eventVar));
   }
+
+ 
 });
 
-
-function welcome(){
+function welcome() {
   Swal.fire({
-    title: 'Bienvenido',
-    text: 'Comencemos!',
-    icon: 'success',
+    title: "Bienvenido",
+    text: "Comencemos!",
+    icon: "success",
     showConfirmButton: false,
-    timer: 1500
-  })
+    timer: 1500,
+  });
 }
 
 window.addEventListener("load", () => {
-  localStorage.getItem("Evento")
-    ? showModal()
-    : welcome();
-
-
+  localStorage.getItem("Evento") ? showModal() : welcome();
 });
 
 function showModal() {
@@ -293,10 +291,13 @@ editEvent.addEventListener("click", () => {
   document.querySelector("#title").value = eventVar.name;
   document.querySelector("#details").value = eventVar.description;
   document.querySelector("#address").value = eventVar.address;
-  // PENDIENTE AGREGAR ESTOS VALORES POR FORMATO
   document.querySelector("#date").value = eventVar.date;
   document.querySelector("#time").value = eventVar.time;
   document.querySelector("#limit").value = eventVar.limiteInvitados;
+
+  limit.textContent = eventVar.limiteInvitados;
+  //cantidadDeInvitados.textContent = eventVar.invitados;
+
   location.hash = "#sectionDos";
   disabledEventInput(true);
 });
@@ -324,7 +325,6 @@ function disabledEventInput(value) {
   document.querySelector("#generar").disabled = value;
 }
 
-
 const toastSave = Toastify({
   text: "Guardado!",
   duration: 3000,
@@ -334,11 +334,21 @@ const toastSave = Toastify({
   stopOnFocus: true, // Prevents dismissing of toast on hover
   style: {
     background: "#ECECEC",
-    color:"Green",
+    color: "Green",
   },
-  onClick: function(){} 
+  onClick: function () {},
 });
 
+async function GetPriceMenu(menu) {
+  const response = await fetch("./Data/data.json");
+  const data = await response.json();
+  let price = 0;
 
+  data.forEach((element) => {
+    if (element.type == menu) {
+      price = element.price;
+    }
+  });
 
-
+return price;
+}

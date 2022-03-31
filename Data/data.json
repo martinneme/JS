@@ -1,0 +1,11 @@
+[
+        { "type": "vegano",
+            "price": 400
+        },
+        { "type":"carne",
+            "price": 430
+        },
+        {"type": "celiaco",
+            "price": 420
+        }
+]
