@@ -1,6 +1,3 @@
-// document.addEventListener("DOMContentLoader",()=>{
-//PENDIENTE REVISAR SCOPE DE VARIABLES PORQUE AL INTEGRARLO ROMPE ALGUNAS FUNCIONES.
-// });
 
 class Evento {
   constructor(name, description, address, date, time, invitadosLimite) {
@@ -35,7 +32,7 @@ const reportlist = document.querySelector("#reportlist");
 let invitados = [];
 let flagLimiteInvitados = 0;
 let flagGenerate = 0;
-let ultimoId = 0;
+let Id;
 let select;
 let eventVar = {};
 
@@ -43,22 +40,46 @@ limiteInvitados.textContent = 0;
 cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
-function generarID(ultimoId) {
-  let id = ultimoId + 1;
+function generarID() {
+  let ultimoId=0;
+  let id;
+
+  if(localStorage.getItem("ultimoId")){
+     ultimoId = JSON.parse(localStorage.getItem("ultimoId"));
+     id = ultimoId + 1;
+  }else{
+    id=ultimoId;
+  }
+  
+  localStorage.setItem("ultimoId", JSON.stringify(id));
   return id;
 }
 
 agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
 
-  ultimoId = generarID(ultimoId);
+   id = generarID();
 
   if (nombre) {
     if (isNaN(nombre)) {
       if (flagGenerate == "0") {
         alert("Debes generar el evento primero");
       } else {
-        const cardName = document.createElement("div");
+        const persona = new Persona(id, nombre);
+        invitados.push(persona);
+        localStorage.setItem("Invitados", JSON.stringify(invitados));
+
+      }
+    }
+  }
+
+renderInvitado(nombre,id);
+
+  panelInvitados();
+});
+
+function renderInvitado(nombre,id){
+  const cardName = document.createElement("div");
         const tagName = document.createElement("p");
         const buttonAdd = document.createElement("button");
         const buttonDel = document.createElement("button");
@@ -74,13 +95,13 @@ agregar.addEventListener("click", () => {
         buttonDel.classList.add("add");
 
         tagName.textContent = nombre;
-        tagName.setAttribute("id", ultimoId);
-        buttonAdd.setAttribute("tag", ultimoId);
+        tagName.setAttribute("id", id);
+        buttonAdd.setAttribute("tag", id);
         buttonAdd.setAttribute("id", nombre);
         buttonAdd.setAttribute("onclick", "addName(this)");
         buttonAdd.textContent = ">";
 
-        buttonDel.setAttribute("tag", ultimoId);
+        buttonDel.setAttribute("tag",id);
         buttonDel.setAttribute("id", nombre);
         buttonDel.setAttribute("onclick", "delName(this)");
         buttonDel.textContent = "Quitar";
@@ -91,14 +112,7 @@ agregar.addEventListener("click", () => {
 
         document.querySelector("#item").appendChild(codigoHTMl);
         document.querySelector("#invitado").value = "";
-
-        const persona = new Persona(ultimoId, nombre);
-        invitados.push(persona);
-      }
-    }
-  }
-  panelInvitados();
-});
+}
 
 function panelInvitados() {
   cantidadDeInvitados.textContent = invitados.length;
@@ -275,6 +289,9 @@ let clear = document.querySelector("#delEvent");
 //* clear remueve el evento anterior.
 clear.addEventListener("click", () => {
   localStorage.removeItem("Evento");
+  localStorage.removeItem("ultimoId");
+  localStorage.removeItem("Invitados");
+
 });
 
 //*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
@@ -287,7 +304,7 @@ editEvent.addEventListener("click", () => {
   mod.click();
 
   eventVar = JSON.parse(localStorage.getItem("Evento"));
-
+  invitados =  JSON.parse(localStorage.getItem("Invitados"));
   document.querySelector("#title").value = eventVar.name;
   document.querySelector("#details").value = eventVar.description;
   document.querySelector("#address").value = eventVar.address;
@@ -296,22 +313,20 @@ editEvent.addEventListener("click", () => {
   document.querySelector("#limit").value = eventVar.limiteInvitados;
 
   limit.textContent = eventVar.limiteInvitados;
-  //cantidadDeInvitados.textContent = eventVar.invitados;
+
+  if(invitados){
+    invitados.forEach((element) => {
+   renderInvitado(element.nombre,element.id)
+      
+    });
+  }
+
+
 
   location.hash = "#sectionDos";
   disabledEventInput(true);
 });
 
-//* FRAGMENTO EN CONSTRUCCION PARA IMPLEMENTAR GET EN LOCALSTORAGE A FUTURO *
-// function GetInvitados() {
-//   let lista = localStorage.getItem("listaInvitados");
-//   return lista;
-// }
-
-// function SaveInvitados(persona) {
-//   let lista = GetInvitados();
-//   for (i = 0; i < lista.length; i++) {}
-// }
 
 // FUNCION QUE SWITCHEA LOS INPUT GENERACION DE EVENTO
 function disabledEventInput(value) {
@@ -329,9 +344,9 @@ const toastSave = Toastify({
   text: "Guardado!",
   duration: 3000,
   newWindow: true,
-  gravity: "top", // `top` or `bottom`
-  position: "right", // `left`, `center` or `right`
-  stopOnFocus: true, // Prevents dismissing of toast on hover
+  gravity: "top", 
+  position: "right", 
+  stopOnFocus: true, 
   style: {
     background: "#ECECEC",
     color: "Green",
