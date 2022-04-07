@@ -71,6 +71,7 @@ agregar.addEventListener("click", () => {
         invitados.push(persona);
         localStorage.setItem("Invitados", JSON.stringify(invitados));
         renderInvitado(nombre, id);
+        eventVar.invitados = invitados;
         panelInvitados();
       }
     }
