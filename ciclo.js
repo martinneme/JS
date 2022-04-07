@@ -409,7 +409,7 @@ async function getPriceMenu(menu) {
 async function sendInvitations(wppbtn) {
   let idbtn = wppbtn.id;
   let celular = undefined;
-
+  let wppSend;
   try {
     for (i = 0; i < invitados.length; i++) {
       if (eventVar.invitados[i].id == idbtn) {
@@ -422,9 +422,14 @@ async function sendInvitations(wppbtn) {
       throw "No existe telefono registrado para este invitado";
     }
     const { name, description, date, time } = eventVar;
-
-    let wppSend = `https://wa.me/54${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
+if(screen.width>720){
+     wppSend = `https://wa.me/54${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
     window.open(wppSend);
+}else{
+  wppSend = `https://wa.me/${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
+    window.open(wppSend);
+}
+  
   } catch (e) {
     err(e);
   }
