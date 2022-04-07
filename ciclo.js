@@ -168,7 +168,7 @@ generar.addEventListener("click", () => {
 
     disabledEventInput(true);
   } else {
-    alert("Debe completar todos los campos");
+    err("Debe completar todos los campos");
   }
 });
 
