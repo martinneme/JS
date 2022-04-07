@@ -5,7 +5,7 @@
     width: 90%;
    background-image:url("img/generadorFondo.png") ;
    background-repeat: no-repeat;
-   background-size:cover;
+   background-size:100% 100%;;
 }
 
 
@@ -56,15 +56,13 @@
     margin-left:1%
 }
 
-.sectionDos{
-    height: 90vh;
-}
+
 
 .containerCards {
     display: flex;
     margin: auto;
     width: 90%;
-   height: 70%;
+   height: 70vh;
     align-items: flex-start;
     justify-content: start;
  
@@ -220,4 +218,41 @@
 
 .btnSend{
     background-image:url("img/whatsapp.png") ;
+}
+
+
+@media only screen and (max-width: 1024px){
+
+    .formArea {
+        margin: auto;
+        padding: 3%;
+        width: 90%;
+        display: inline-block;
+        flex-wrap: nowrap;
+        background-color: #46cd88;
+        text-align: center;
+    }
+
+    .event{
+        width: 100%;
+        margin: 2%;
+    }
+
+    .containerCards{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .panel{
+        
+    }
+
+    .card-body{
+        height: 250px;
+    }
+
+   .containerCards{
+       height: auto;
+   }
+
 }
