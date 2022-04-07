@@ -65,7 +65,7 @@ agregar.addEventListener("click", () => {
   if (nombre) {
     if (isNaN(nombre)) {
       if (flagGenerate == "0") {
-        alert("Debes generar el evento primero");
+        err("Debes generar el evento primero");
       } else {
         const persona = new Persona(id, nombre);
         invitados.push(persona);
