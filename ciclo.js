@@ -423,14 +423,14 @@ async function sendInvitations(wppbtn) {
     }
     const { name, description, date, time } = eventVar;
 
-    let md = new MobileDetect(window.navigator.userAgent);
-    if (md.mobile()) {
-         wppSend = `https://wa.me/${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
+    
+if(screen.width>720){
+     wppSend = `https://wa.me/54${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
     window.open(wppSend);
-    }else{
-        wppSend = `https://wa.me/54${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
+}else{
+  wppSend = `https://wa.me/${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
     window.open(wppSend);
-    }
+}
   
   } catch (e) {
     err(e);
