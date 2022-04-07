@@ -1,4 +1,3 @@
-
 class Evento {
   constructor(name, description, address, date, time, invitadosLimite) {
     this.name = name;
@@ -14,6 +13,9 @@ class Persona {
   constructor(id, nombre) {
     this.id = id;
     this.nombre = nombre;
+    this.edad = "";
+    this.tel = "";
+    this.dieta = "";
   }
 }
 
@@ -41,16 +43,16 @@ cantidadDeInvitados.textContent = 0;
 porcentajeOcupacion.textContent = 0;
 
 function generarID() {
-  let ultimoId=0;
+  let ultimoId = 0;
   let id;
 
-  if(localStorage.getItem("ultimoId")){
-     ultimoId = JSON.parse(localStorage.getItem("ultimoId"));
-     id = ultimoId + 1;
-  }else{
-    id=ultimoId;
+  if (localStorage.getItem("ultimoId")) {
+    ultimoId = JSON.parse(localStorage.getItem("ultimoId"));
+    id = ultimoId + 1;
+  } else {
+    id = ultimoId;
   }
-  
+
   localStorage.setItem("ultimoId", JSON.stringify(id));
   return id;
 }
@@ -58,7 +60,7 @@ function generarID() {
 agregar.addEventListener("click", () => {
   let nombre = document.querySelector("#invitado").value;
 
-   id = generarID();
+  id = generarID();
 
   if (nombre) {
     if (isNaN(nombre)) {
@@ -68,50 +70,56 @@ agregar.addEventListener("click", () => {
         const persona = new Persona(id, nombre);
         invitados.push(persona);
         localStorage.setItem("Invitados", JSON.stringify(invitados));
-
+        renderInvitado(nombre, id);
+        panelInvitados();
       }
     }
   }
-
-renderInvitado(nombre,id);
-
-  panelInvitados();
 });
 
-function renderInvitado(nombre,id){
+function renderInvitado(nombre, id) {
   const cardName = document.createElement("div");
-        const tagName = document.createElement("p");
-        const buttonAdd = document.createElement("button");
-        const buttonDel = document.createElement("button");
+  const tagName = document.createElement("p");
+  const buttonAdd = document.createElement("button");
+  const buttonDel = document.createElement("button");
+  const buttonWpp = document.createElement("button");
 
-        cardName.classList.add("Card-Body");
-        cardName.classList.add("item");
-        tagName.classList.add("Card-text");
-        buttonAdd.classList.add("btn-primary");
-        buttonAdd.classList.add("btn");
-        buttonAdd.classList.add("add");
-        buttonDel.classList.add("btn-primary");
-        buttonDel.classList.add("btn");
-        buttonDel.classList.add("add");
+  cardName.classList.add("Card-Body");
+  cardName.classList.add("item");
+  tagName.classList.add("Card-text");
+  buttonAdd.classList.add("btn-primary");
+  buttonAdd.classList.add("btn");
+  buttonAdd.classList.add("add");
+  buttonDel.classList.add("btn-primary");
+  buttonDel.classList.add("btn");
+  buttonDel.classList.add("add");
+  buttonWpp.classList.add("btn");
+  buttonWpp.classList.add("btn-primary");
+  buttonWpp.classList.add("add");
 
-        tagName.textContent = nombre;
-        tagName.setAttribute("id", id);
-        buttonAdd.setAttribute("tag", id);
-        buttonAdd.setAttribute("id", nombre);
-        buttonAdd.setAttribute("onclick", "addName(this)");
-        buttonAdd.textContent = ">";
+  tagName.setAttribute("id", id);
+  buttonAdd.setAttribute("tag", id);
+  buttonAdd.setAttribute("id", nombre);
+  buttonAdd.setAttribute("onclick", "addName(this)");
+  buttonAdd.textContent = nombre;
 
-        buttonDel.setAttribute("tag",id);
-        buttonDel.setAttribute("id", nombre);
-        buttonDel.setAttribute("onclick", "delName(this)");
-        buttonDel.textContent = "Quitar";
+  buttonDel.setAttribute("tag", id);
+  buttonDel.setAttribute("id", nombre);
+  buttonDel.setAttribute("onclick", "delName(this)");
+  buttonDel.textContent = "Quitar";
 
-        let codigoHTMl = cardName.appendChild(tagName);
-        codigoHTMl.appendChild(buttonAdd);
-        codigoHTMl.appendChild(buttonDel);
+  buttonWpp.innerHTML = '<img src="img/whatsapp.png"></img>';
+  buttonWpp.setAttribute("tag", nombre);
+  buttonWpp.setAttribute("id", id);
+  buttonWpp.setAttribute("onclick", "sendInvitations(this)");
 
-        document.querySelector("#item").appendChild(codigoHTMl);
-        document.querySelector("#invitado").value = "";
+  let codigoHTMl = cardName.appendChild(tagName);
+  codigoHTMl.appendChild(buttonAdd);
+  codigoHTMl.appendChild(buttonDel);
+  codigoHTMl.appendChild(buttonWpp);
+
+  document.querySelector("#item").appendChild(codigoHTMl);
+  document.querySelector("#invitado").value = "";
 }
 
 function panelInvitados() {
@@ -176,6 +184,10 @@ function delName(delbtn) {
   const item = document.getElementById(ele);
   item.remove();
 
+  select = undefined;
+  nombre = document.querySelector("#nombreInvitado");
+  nombre.textContent = "";
+
   for (i = 0; i < invitados.length; i++) {
     if (invitados[i].id == ele) {
       invitados.splice(i, 1);
@@ -185,7 +197,7 @@ function delName(delbtn) {
 
 async function allGuestsGenerate() {
   let cantidadCarne = 0;
-  let cantidadViggie = 0;
+  let cantidadVeggie = 0;
   let cantidadCeliaco = 0;
   let adult = 0;
   let children = 0;
@@ -193,8 +205,8 @@ async function allGuestsGenerate() {
   for (let i = 0; i < invitados.length; i++) {
     if (invitados[i].dieta == "Carne") {
       cantidadCarne++;
-    } else if (invitados[i].dieta == "Viggie") {
-      cantidadViggie++;
+    } else if (invitados[i].dieta == "Veggie") {
+      cantidadVeggie++;
     } else if (invitados[i].dieta == "Celiaco") {
       cantidadCeliaco++;
     }
@@ -202,16 +214,25 @@ async function allGuestsGenerate() {
     invitados[i].edad >= 18 ? adult++ : children++;
   }
 
-   const priceCarne = await GetPriceMenu("carne");
-  const priceVegano = await GetPriceMenu("vegano");
-  const priceCeliaco = await GetPriceMenu("celiaco");
+  const priceCarne = await getPriceMenu("carne");
+  const priceVegano = await getPriceMenu("vegano");
+  const priceCeliaco = await getPriceMenu("celiaco");
 
   document.querySelector("#cantCarne").textContent =
-    "Han preferido dieta de Carnes: " + cantidadCarne+" y un presupuesto de $"+ priceCarne*cantidadCarne;
-  document.querySelector("#cantViggie").textContent =
-    "Han preferido dieta Viggie: " + cantidadViggie+" y un presupuesto de $"+ priceVegano*cantidadViggie;
+    "Han preferido dieta de Carnes: " +
+    cantidadCarne +
+    " y un presupuesto de $" +
+    priceCarne * cantidadCarne;
+  document.querySelector("#cantVeggie").textContent =
+    "Han preferido dieta Veggie: " +
+    cantidadVeggie +
+    " y un presupuesto de $" +
+    priceVegano * cantidadVeggie;
   document.querySelector("#cantCeliaco").textContent =
-    "Han preferido dieta de Celiaca: " + cantidadCeliaco+" y un presupuesto de $"+ priceCeliaco*cantidadCeliaco;
+    "Han preferido dieta de Celiaca: " +
+    cantidadCeliaco +
+    " y un presupuesto de $" +
+    priceCeliaco * cantidadCeliaco;
   document.querySelector("#adulto").textContent =
     "Hay " + adult + " personas adultas";
   document.querySelector("#menor").textContent =
@@ -221,32 +242,41 @@ async function allGuestsGenerate() {
 allGuest.addEventListener("click", allGuestsGenerate);
 
 guardar.addEventListener("click", () => {
-  let dietaOpt;
-  select = parseInt(select);
-  let edad = document.querySelector("#edad").value;
-  let email = document.querySelector("#email").value;
-  let dieta = document.getElementsByName("dieta");
-
-  const position = invitados.find((el) => el.id == select);
-  for (i = 0; i < dieta.length; i++) {
-    if (dieta[i].checked == true) {
-      dietaOpt = dieta[i].id;
+  try {
+    if (select == undefined) {
+      throw "No se ha seleccionado ningun invitado";
     }
-  }
-  position.edad = edad;
-  position.email = email;
-  position.dieta = dietaOpt;
-  document.querySelector("#edad").value = "";
-  document.querySelector("#email").value = "";
+    let dietaOpt;
+    select = parseInt(select);
+    let edad = document.querySelector("#edad").value;
+    let tel = document.querySelector("#tel").value;
+    let dieta = document.getElementsByName("dieta");
 
-  if (position.edad && position.dieta && position.email) {
-    toastSave.showToast();
-    eventVar = JSON.parse(localStorage.getItem("Evento"));
-    eventVar.invitados = invitados;
-    localStorage.setItem("Evento", JSON.stringify(eventVar));
+    const position = invitados.find((el) => el.id == select);
+    for (i = 0; i < dieta.length; i++) {
+      if (dieta[i].checked == true) {
+        dietaOpt = dieta[i].id;
+      }
+    }
+    if (edad > 0 && edad < 100 && tel.length < 11 && tel.length >= 8) {
+      position.edad = edad;
+      position.tel = tel;
+      position.dieta = dietaOpt;
+      document.querySelector("#edad").value = "";
+      document.querySelector("#tel").value = "";
+    } else {
+      throw "Los campos no cumplen los requisitos";
+    }
+    if (position.edad && position.dieta && position.tel) {
+      toastSave.showToast();
+      eventVar = JSON.parse(localStorage.getItem("Evento"));
+      eventVar.invitados = invitados;
+      localStorage.setItem("Evento", JSON.stringify(eventVar));
+      localStorage.setItem("Invitados", JSON.stringify(invitados));
+    }
+  } catch (e) {
+    err(e);
   }
-
- 
 });
 
 function welcome() {
@@ -256,6 +286,16 @@ function welcome() {
     icon: "success",
     showConfirmButton: false,
     timer: 1500,
+  });
+}
+
+function err(msj) {
+  Swal.fire({
+    title: "Error",
+    text: msj,
+    icon: "error",
+    showConfirmButton: false,
+    timer: 3000,
   });
 }
 
@@ -291,7 +331,6 @@ clear.addEventListener("click", () => {
   localStorage.removeItem("Evento");
   localStorage.removeItem("ultimoId");
   localStorage.removeItem("Invitados");
-
 });
 
 //*PARTE DEL MODAL QUE RETOMA DATOS EN LOCALSTORAGE
@@ -304,7 +343,7 @@ editEvent.addEventListener("click", () => {
   mod.click();
 
   eventVar = JSON.parse(localStorage.getItem("Evento"));
-  invitados =  JSON.parse(localStorage.getItem("Invitados"));
+  invitados = JSON.parse(localStorage.getItem("Invitados"));
   document.querySelector("#title").value = eventVar.name;
   document.querySelector("#details").value = eventVar.description;
   document.querySelector("#address").value = eventVar.address;
@@ -314,19 +353,17 @@ editEvent.addEventListener("click", () => {
 
   limit.textContent = eventVar.limiteInvitados;
 
-  if(invitados){
+  if (invitados) {
+    eventVar.invitados = invitados;
     invitados.forEach((element) => {
-   renderInvitado(element.nombre,element.id)
-      
+      renderInvitado(element.nombre, element.id);
     });
+    panelInvitados();
   }
-
-
 
   location.hash = "#sectionDos";
   disabledEventInput(true);
 });
-
 
 // FUNCION QUE SWITCHEA LOS INPUT GENERACION DE EVENTO
 function disabledEventInput(value) {
@@ -344,9 +381,9 @@ const toastSave = Toastify({
   text: "Guardado!",
   duration: 3000,
   newWindow: true,
-  gravity: "top", 
-  position: "right", 
-  stopOnFocus: true, 
+  gravity: "top",
+  position: "right",
+  stopOnFocus: true,
   style: {
     background: "#ECECEC",
     color: "Green",
@@ -354,7 +391,7 @@ const toastSave = Toastify({
   onClick: function () {},
 });
 
-async function GetPriceMenu(menu) {
+async function getPriceMenu(menu) {
   const response = await fetch("./Data/data.json");
   const data = await response.json();
   let price = 0;
@@ -365,5 +402,29 @@ async function GetPriceMenu(menu) {
     }
   });
 
-return price;
+  return price;
+}
+
+async function sendInvitations(wppbtn) {
+  let idbtn = wppbtn.id;
+  let celular = undefined;
+
+  try {
+    for (i = 0; i < invitados.length; i++) {
+      if (eventVar.invitados[i].id == idbtn) {
+        if (eventVar.invitados[i].tel != "") {
+          celular = eventVar.invitados[i].tel;
+        }
+      }
+    }
+    if (celular == undefined) {
+      throw "No existe telefono registrado para este invitado";
+    }
+    const { name, description, date, time } = eventVar;
+
+    let wppSend = `https://wa.me/54${celular}?text=Hola,%20quisiera%20invitarte a mi ${name}-%20${description},%20el%${date}%20a%20las%20${time}.%20Te%20espero!%20.Gracias`;
+    window.open(wppSend);
+  } catch (e) {
+    err(e);
+  }
 }
